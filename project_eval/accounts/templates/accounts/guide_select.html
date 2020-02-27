@@ -1,0 +1,47 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<h2>Guide</h2>
+{% if input %}
+<form action="." method="post">
+  {% csrf_token %}
+  <div class="form-group row">
+    <label for="int_guide" class="col-sm-2 col-form-label">Internal guide</label>
+    <div class="col-sm-10">
+      <select class="custom-select" name="int_guide" id="int_guide" required>
+        <option value="" disabled selected>Choose...</option>
+        {% for id, name in int_guides.items %}
+        <option value="{{id}}">{{name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  {% if user.user_type == 2 %}
+  <div class="form-group row">
+    <label for="ext_guide" class="col-sm-2 col-form-label">External guide</label>
+    <div class="col-sm-10">
+      <select class="custom-select" name="ext_guide" id="ext_guide" required>
+        <option value="" disabled selected>Choose...</option>
+        {% for id, name in ext_guides.items %}
+        <option value="{{id}}">{{name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  {% endif %}
+  <div id="input_student_details"></div>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>
+{% else %}
+<h4>Internal guide: {{ int_guides }}</h4>
+{% if user.user_type == 2 %}
+<h4>External guide: {{ ext_guides }}</h4>
+{% endif %}
+{% endif %}
+{% endblock %}
+{% block jsblock %}
+{% endblock jsblock %}

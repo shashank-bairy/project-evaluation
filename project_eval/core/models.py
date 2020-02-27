@@ -13,10 +13,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     (TEAM, 'team'),
     (INTERN, 'intern'),
     (PANEL, 'panel'),
-    (GUIDE, 'guide')
+    (GUIDE, 'guide'),
   )
   username = models.CharField(_('username'),max_length=150,unique=True)
   user_type = models.PositiveSmallIntegerField(_('user type'),choices=USER_TYPE_CHOICES, null=True)
+  user_id = models.PositiveIntegerField(_('user id'), blank=True, null=True)
   date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
   is_active = models.BooleanField(_('active'), default=True)
   is_staff = models.BooleanField(_('staff'), default=False)
