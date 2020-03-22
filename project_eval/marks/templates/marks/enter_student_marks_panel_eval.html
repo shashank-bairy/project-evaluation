@@ -1,0 +1,47 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+    <style>
+        .header{
+            background-color: #d3d3d3;
+            color: black;
+        }
+    </style>
+    <div class="card">
+        <h4 align="center" class="card-header header">CIE {{phase}} Marks</h4>
+        <div class="card-body"><form action="" method="POST">
+            {% csrf_token %}
+            <div class="details">
+                <p><b>Student Name</b>: {{student.full_name}}</p>
+                <p><b>USN</b>: {{student.usn}}</p>
+            </div>
+            <div>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <b><th>Panel Member</th></b>
+                            {% for i in rubrics  %}
+                                <b><th>{{i.description}}({{i.max_marks}})</th></b>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pm in panel  %}
+                            <tr>
+                                <td>{{pm.full_name}}</td>
+                                {% for m in rubrics  %}
+                                 <td>
+                                 <input type="number" class="form-control" name="{{m.id}}_{{pm.id}}" min=0 max={{m.max_marks}} placeholder="max marks: {{m.max_marks}} " required>   
+                                 </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <input type="submit" class="btn btn-sm btn-info" name="Submit"> 
+        </form>
+    </div>
+    </div>
+{% endblock %}

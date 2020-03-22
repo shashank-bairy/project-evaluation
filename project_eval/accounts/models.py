@@ -22,6 +22,9 @@ class Faculty(models.Model):
   last_name = models.CharField(max_length=50)
   email = models.EmailField(max_length=100, unique=True)
   ph_no = models.PositiveIntegerField()
+
+  class Meta:
+        verbose_name_plural = "faculty"
   
   @property
   def full_name(self):

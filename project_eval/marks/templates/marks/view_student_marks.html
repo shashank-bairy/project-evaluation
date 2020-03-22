@@ -1,0 +1,61 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<h2 class="text-center">Student Details</h2>
+<dl class="row">
+  <dt class="col-sm-3">USN</dt>
+  <dd class="col-sm-9">{{student.usn}}</dd>
+  <dt class="col-sm-3">Name</dt>
+  <dd class="col-sm-9">{{student.full_name}}</dd>
+  <dt class="col-sm-3">Email</dt>
+  <dd class="col-sm-9">{{student.email}}</dd>
+  <dt class="col-sm-3">Phone no.</dt>
+  <dd class="col-sm-9">{{student.ph_no}}</dd>
+</dl>
+<div class="accordion" id="accordionStudentDetails">
+  {% for phase in data %}
+  <div class="card">
+    <div class="card-header" id="heading{{ forloop.counter }}">
+      <h2 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+          data-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+          aria-controls="collapse{{ forloop.counter }}" style="text-decoration: none;">
+          <h6 align="center">Phase {{phase.phase_number}} Marks</h6>
+        </button>
+      </h2>
+    </div>
+    <div id="collapse{{ forloop.counter }}" class="collapse" aria-labelledby="heading{{ forloop.counter }}"
+      data-parent="#accordionStudentDetails">
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th>Faculty Member</th>
+            {% for i in phase.rubrics  %}
+            <th>{{i.description}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in phase.marks  %}
+          <tr>
+            {% if m.faculty != -1 %}
+            <td>{{m.faculty}}</td>
+            {% else %}
+            <td>-</td>
+            {% endif %}
+            {% for x in m.marks %}
+            {% if x != -1 %}
+            <td>{{x}}</td>
+            {% else %}
+            <td>-</td>
+            {% endif %}
+            {% endfor %}
+          <tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+{% if user.is_superuser %}
+<h2 class="text-center">Team Page</h2>
+{% else %}
+<h2 class="text-center">Evaluate Team</h2>
+{% endif %}
+<br>
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{team.user.username}}</dd>
+  <dt class="col-sm-3">Topic</dt>
+  <dd class="col-sm-9">{{team.topic}}</dd>
+  <dt class="col-sm-3">Internal Guide</dt>
+  {% if int_guide is not None %}
+  <dd class="col-sm-9">{{int_guide}}</dd>
+  {% else %}
+  <dd class="col-sm-9">Not selected</dd>
+  {% endif %}
+  <dt class="col-sm-3">Phase Number</dt>
+  <dd class="col-sm-4">
+    <select class="custom-select" name="phase" id="phase" onchange="get_phase()" required>
+      <option value="" disabled selected>Choose...</option>
+      {% for num in num_of_phases %}
+      <option value="{{forloop.counter}}">Phase {{forloop.counter}}</option>
+      {% endfor %}
+    </select>
+  </dd>
+</dl>
+<div class="row" id="team-member-block" style="display: none;">
+  <div class="col-md-12">
+    <h4>Team Members</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">USN</th>
+          <th scope="col">Student Name</th>
+          <th scope="col">Details</th>
+          {% if user.is_superuser %}
+          <th scope="col">Update Marks</th>
+          {% else %}
+          <th scope="col">Evaluate</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{s.usn}}</td>
+          <td>{{s.full_name}}</td>
+          <td><a href="{% url 'view_student_marks' s.usn %}">Details</a></td>
+          {% if user.user_type == 3 %}
+          {% for num in num_of_phases %}
+          <td class="phase-item phase_{{forloop.counter}}" style="display: none;"><a
+              href="{% url 'enter_student_marks_panel' s.usn forloop.counter %}">Evaluate</a>
+          </td>
+          {% endfor %}
+          {% endif %}
+          {% if user.user_type == 4 %}
+          {% for num in num_of_phases %}
+          <td class="phase-item phase_{{forloop.counter}}" style="display: none;"><a
+              href="{% url 'enter_student_marks_guide' s.usn forloop.counter %}">Evaluate</a>
+          </td>
+          {% endfor %}
+          {% endif %}
+          {% if user.is_superuser %}
+          {% for num in num_of_phases %}
+          <td class="phase-item phase_{{forloop.counter}}" style="display: none;"><a
+              href="{% url 'update_student_marks' s.usn forloop.counter %}">Update</a>
+          </td>
+          {% endfor %}
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block jsblock %}
+<script>
+  window.onload = window.onpageshow = function () {
+    document.getElementById('phase').selectedIndex = 0;
+  }
+  function get_phase() {
+    document.getElementById('team-member-block').style.display = "block";
+
+    var phase = document.getElementById('phase').value;
+
+    var phase_items = document.getElementsByClassName('phase-item');
+    for (var i = 0; i < phase_items.length; i++)
+      phase_items[i].style.display = "none";
+
+    var current_phase_items = document.getElementsByClassName('phase_' + phase);
+    for (var i = 0; i < current_phase_items.length; i++)
+      current_phase_items[i].style.display = "table-cell";
+  }
+</script>
+{% endblock jsblock %}

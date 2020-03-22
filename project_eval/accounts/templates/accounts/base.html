@@ -12,14 +12,15 @@
   <title>ProjEval</title>
 </head>
 
-<body>
+<body style="background-color: ghostwhite;">
+  {% block navbar %}
+  {% include './navbar.html' %}
+  {% endblock navbar %}
   <div id="fb-root"></div>
   <div class="container-fluid pd-reset">
-    <header class="site-header">
-      {% block navbar %}
-      {% include './navbar.html' %}
-      {% endblock navbar %}
-    </header>
+    <!-- <header class="site-header">
+      
+    </header> -->
     <main>
       <div class="row content">
         <div class="col-md-2"></div>

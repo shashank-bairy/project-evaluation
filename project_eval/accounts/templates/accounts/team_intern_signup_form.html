@@ -26,6 +26,11 @@
       </select>
     </div>
   </div>
+  {% if error is not None %}
+  <div class="alert alert-danger" role="alert">
+    {{error}}
+  </div>
+  {% endif %}
   <div id="input_user_type"></div>
   <div id="input_user_members"></div>
   <div class="form-group row">

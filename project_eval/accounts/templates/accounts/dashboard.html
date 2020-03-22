@@ -1,7 +1,188 @@
 {% extends 'accounts/base.html' %}
 
 {% block content %}
-<h1>Dashboard</h1>
+{% if user.user_type == 1 %}
+<h2 class="text-center">Team details</h2>
+<br>
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{user.username}}</dd>
+  <dt class="col-sm-3">Topic</dt>
+  <dd class="col-sm-9">{{user.team.topic}}</dd>
+  <dt class="col-sm-3">Internal Guide</dt>
+  {% if int_guide is not None %}
+  <dd class="col-sm-9">{{int_guide}}</dd>
+  {% else %}
+  <dd class="col-sm-9"><a href="/guide_select">Select guide</a></dd>
+  {% endif %}
+</dl>
+<div class="row">
+  <div class="col-md-12">
+    <h4>Team Members</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">USN</th>
+          <th scope="col">Student Name</th>
+          <th scope="col">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{s.usn}}</td>
+          <td>{{s.full_name}}</td>
+          <td><a href="{% url 'view_student_marks' s.usn %}">Click here</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if user.user_type == 2 %}
+<h2 class="text-center">Intern details</h2>
+<br>
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{user.username}}</dd>
+  <dt class="col-sm-3">Company Name</dt>
+  <dd class="col-sm-9">{{user.intern.company_name}}</dd>
+  <dt class="col-sm-3">Internal Guide</dt>
+  {% if int_guide is not None %}
+  <dd class="col-sm-9">{{int_guide}}</dd>
+  {% else %}
+  <dd class="col-sm-9"><a href="/guide_select">Select guide</a></dd>
+  {% endif %}
+  <dt class="col-sm-3">External Guide</dt>
+  {% if ext_guide is not None %}
+  <dd class="col-sm-9">{{ext_guide}}</dd>
+  {% else %}
+  <dd class="col-sm-9"><a href="/guide_select">Select guide</a></dd>
+  {% endif %}
+</dl>
+<div class="row">
+  <div class="col-md-12">
+    <h4>Student</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">USN</th>
+          <th scope="col">Student Name</th>
+          <th scope="col">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{student.usn}}</td>
+          <td>{{student.full_name}}</td>
+          <td><a href="{% url 'view_student_marks' student.usn %}">Click here</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% if user.user_type == 3 %}
+<h2 class="text-center">Panel</h2>
+<br>
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{user.username}}</dd>
+</dl>
+<div class="row">
+  <div class="col-md-12">
+    <h4>Panel Members</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Faculty Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in faculties %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{f.full_name}}</td>
+          <td>{{f.email}}</td>
+          <td>{{f.ph_no}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% if user.user_type == 4 %}
+<h2 class="text-center">Guide details</h2>
+<br>
+<dl class="row">
+  <dt class="col-sm-3">Username</dt>
+  <dd class="col-sm-9">{{user.username}}</dd>
+  <dt class="col-sm-3">Guide Type</dt>
+  {% if not guide.is_external %}
+  <dd class="col-sm-9">Internal</dd>
+  {% else %}
+  <dd class="col-sm-9">External</dd>
+  {% endif %}
+</dl>
+<div class="row">
+  <div class="col-md-12">
+    <h4>Guide</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Guide Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{faculty.full_name}}</td>
+          <td>{{faculty.email}}</td>
+          <td>{{faculty.ph_no}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% if user.is_superuser %}
+<h2 class="text-center">Reports</h2>
+<div class="row">
+  <dt class="col-sm-2">Select phase</dt>
+  <dd class="col-sm-4">
+    <select class="custom-select" name="phase_num" id="phase_num" onchange="get_phase()" required>
+      <option value="" disabled selected>Choose...</option>
+      {% for num in num_of_phases %}
+      <option value="{{forloop.counter}}">Phase {{forloop.counter}}</option>
+      {% endfor %}
+      <option value="0">All Phases</option>
+    </select>
+  </dd>
+</div>
+<div class="row mt-3">
+  <dt class="col-sm-2"></dt>
+  <dd class="col-sm-4" id="download-btn"></dd>
+</div>
+{% endif %}
 {% endblock %}
 {% block jsblock %}
+<script>
+  function get_phase() {
+    var phase = parseInt(document.getElementById('phase_num').value);
+    if (phase == 0)
+      document.getElementById('download-btn').innerHTML = `<a class="btn btn-primary" href="/marks/download_all_phase_marks/">Download</a>`;
+    else {
+      document.getElementById('download-btn').innerHTML = `<a class="btn btn-primary" href="/marks/download_phase_marks/${phase}/">Download</a>`;
+    }
+  } 
+</script>
 {% endblock jsblock %}

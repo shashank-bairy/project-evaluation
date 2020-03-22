@@ -1,0 +1,30 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="row">
+  <h4>Teams</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Topic</th>
+        <th scope="col">Team Page</th>
+      </tr>
+    </thead>
+    <tbody id="teams-list">
+      {% for t in teams %}
+      <tr>
+        <th scope="row">{{forloop.counter}}</th>
+        <td>{{t.user.username}}</td>
+        <td>{{t.topic}}</td>
+        <td><a href="{% url 'team_evaluate' t.id %}">Click here</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+{% endblock %}
+{% block jsblock %}
+{% endblock jsblock %}

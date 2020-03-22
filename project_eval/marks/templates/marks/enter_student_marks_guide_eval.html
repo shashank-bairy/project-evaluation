@@ -1,0 +1,45 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<style>
+  .header{
+      background-color: #d3d3d3;
+      color: black;
+  }
+</style>
+<div class="card">
+  <h5 class="card-header header" align="center">CIE Phase {{phase}} Evaluation</h5>
+  <div class="card-body">
+    <div class="details">
+      <p><b>Student Name</b>: {{student.full_name}}</p>
+      <p><b>USN</b>: {{student.usn}}</p>
+    </div>
+    <form action="" method="post">
+      {% csrf_token %}
+      <div>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    {% for i in rubrics  %}
+                        <th><b>{{i.description}}({{i.max_marks}})</b></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {% for i in rubrics  %}
+                         <td style="padding: 12px 0px ;">
+                         <input type="number" class="form-control" name="{{i.id}}" value="{{i.marks}}" min=0 max={{i.max_marks}} placeholder="max marks: {{i.max_marks}} " required>   
+                         </td>
+                {% endfor %}
+              </tr>
+            </tbody>
+        </table>
+      </div>
+      <hr>
+      <input type="submit" class="btn btn-sm btn-info" name="Submit">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

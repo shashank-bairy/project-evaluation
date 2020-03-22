@@ -1,0 +1,30 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+<div class="row">
+  <h4>Interns</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Company Name</th>
+        <th scope="col">Intern Page</th>
+      </tr>
+    </thead>
+    <tbody id="interns-list">
+      {% for i in interns %}
+      <tr>
+        <th scope="row">{{forloop.counter}}</th>
+        <td>{{i.user.username}}</td>
+        <td>{{i.company_name}}</td>
+        <td><a href="{% url 'intern_evaluate' i.id %}">Click here</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+{% endblock %}
+{% block jsblock %}
+{% endblock jsblock %}
