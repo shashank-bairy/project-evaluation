@@ -21,7 +21,7 @@ This application is used by guides and faculties present in panel to evaluate 8t
 - Run migations by executing `python3 manage.py migrate`
 - Start the server by executing `python3 manage.py runserver`
 
-Refer this link:
+Reference:
 https://www.digitalocean.com/community/tutorials/how-to-create-a-django-app-and-connect-it-to-a-database
 
 ## Screenshots
